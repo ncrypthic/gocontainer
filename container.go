@@ -2,7 +2,6 @@ package gocontainer
 
 import (
 	"github.com/facebookgo/inject"
-	"log"
 )
 
 type Service interface {
@@ -68,6 +67,5 @@ func (reg *ServiceRegistry) Ready() error {
 }
 
 func NewContainer() *ServiceRegistry {
-	log.Printf("Initializing service container...")
 	return &ServiceRegistry{services: make(map[string]interface{}), order: make(map[int]string)}
 }
