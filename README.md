@@ -1,6 +1,7 @@
 # Go-container
 
 [![GoDoc](https://godoc.org/github.com/ncrypthic/gocontainer?status.svg)](https://godoc.org/github.com/ncrypthic/gocontainer)
+[![Go Report Card](https://goreportcard.com/badge/github.com/luisvinicius167/godux)](https://goreportcard.com/report/github.com/luisvinicius167/godux)
 
 Simple dependency injection service container for golang
 
@@ -43,3 +44,7 @@ func main() {
 	// a cool struct
 }
 ```
+
+## License
+
+MIT License
