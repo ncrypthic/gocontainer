@@ -1,5 +1,7 @@
 # Go-container
 
+[![GoDoc](https://godoc.org/github.com/ncrypthic/gocontainer?status.svg)](https://godoc.org/github.com/ncrypthic/gocontainer)
+
 Simple dependency injection service container for golang
 
 ## Usage
