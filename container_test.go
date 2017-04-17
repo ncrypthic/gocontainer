@@ -5,16 +5,16 @@ import (
 	_ "testing"
 )
 
-func ExampleUsage() {
+func Example() {
 	type Seed struct {
 		Name string
 	}
 	type BaseStruct struct {
-		Id string `inject:"seed"`
+		ID string `inject:"seed"`
 	}
 	type CoolStruct struct {
 		Name string
-		Base BaseStruct `inject:"base"`
+		Base *BaseStruct `inject:"base"`
 	}
 	container := NewContainer()
 	container.RegisterService("cool", &CoolStruct{Name: "a cool struct"})
@@ -25,10 +25,12 @@ func ExampleUsage() {
 	base, _ := container.GetService("base")
 	cool, _ := container.GetService("cool")
 	fmt.Println(seed.(*Seed).Name)
-	fmt.Println(base.(*BaseStruct).Id)
+	fmt.Println(base.(*BaseStruct).ID)
 	fmt.Println(cool.(*CoolStruct).Name)
+	fmt.Println(cool.(*CoolStruct).Base.ID)
 	// Output:
 	// the seed
 	// base deps
 	// a cool struct
+	// base deps
 }
