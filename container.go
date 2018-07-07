@@ -8,6 +8,7 @@ import (
 	"fmt"
 	"os"
 	"os/signal"
+	"syscall"
 	"time"
 
 	"github.com/facebookgo/inject"
@@ -133,8 +134,8 @@ func (reg *ServiceRegistry) Shutdown() (err error) {
 
 func (reg *ServiceRegistry) shutdownHandler() {
 	go func() {
-		sigchan := make(chan os.Signal, 15)
-		signal.Notify(sigchan, os.Interrupt)
+		sigchan := make(chan os.Signal)
+		signal.Notify(sigchan, syscall.SIGTERM)
 		<-sigchan
 		reg.Shutdown()
 	}()
