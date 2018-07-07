@@ -1,11 +1,7 @@
 # Go-container
 
 [![GoDoc](https://godoc.org/github.com/ncrypthic/gocontainer?status.svg)](https://godoc.org/github.com/ncrypthic/gocontainer)
-<<<<<<< HEAD
 [![Go Report Card](https://goreportcard.com/badge/github.com/ncrypthic/gocontainer)](https://goreportcard.com/report/github.com/ncrypthic/gocontainer)
-=======
-[![Go Report Card](https://goreportcard.com/badge/github.com/luisvinicius167/godux)](https://goreportcard.com/report/github.com/ncrypthic/gocontainer)
->>>>>>> 1a7fcb2c78a2b260351e40dcc994cee3deabbe59
 
 Simple dependency injection service container for golang
 
