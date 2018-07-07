@@ -6,9 +6,11 @@ package gocontainer
 
 import (
 	"fmt"
-	"github.com/facebookgo/inject"
 	"os"
 	"os/signal"
+	"time"
+
+	"github.com/facebookgo/inject"
 )
 
 // Service interface
@@ -40,13 +42,17 @@ type ServiceContainer interface {
 	RegisterServices(services map[string]interface{})
 	// Shutdown all service objects
 	Shutdown() error
+	// Set shutdown duration
+	HandleGracefulShutdown(time.Duration)
 }
 
 // ServiceRegistry is default implementation of ServiceContainer interface
 type ServiceRegistry struct {
-	graph    inject.Graph
-	services map[string]interface{}
-	order    map[int]string
+	graph          inject.Graph
+	services       map[string]interface{}
+	order          map[int]string
+	exitOnShutdown bool
+	gracefulPeriod time.Duration
 }
 
 // GetService find a service by its id in ServiceRegistry
@@ -80,7 +86,9 @@ func (reg *ServiceRegistry) Ready() (err error) {
 	if err != nil {
 		return
 	}
-	defer reg.shutdownHandler()
+	if reg.exitOnShutdown {
+		defer reg.shutdownHandler()
+	}
 	for i := 0; i < len(reg.order); i++ {
 		k := reg.order[i]
 		obj := reg.services[k]
@@ -101,7 +109,9 @@ func (reg *ServiceRegistry) Ready() (err error) {
 }
 
 func (reg *ServiceRegistry) Shutdown() (err error) {
-	fmt.Println("Gracefully shutting down the service container")
+	if reg.exitOnShutdown {
+		fmt.Println("Gracefully shutting down the service container")
+	}
 	for i := 0; i < len(reg.order); i++ {
 		k := reg.order[i]
 		obj := reg.services[k]
@@ -114,6 +124,10 @@ func (reg *ServiceRegistry) Shutdown() (err error) {
 			fmt.Printf("Error while shutting down service [%s] %v", k, shutdownErr)
 		}
 	}
+	if reg.exitOnShutdown {
+		<-time.After(reg.gracefulPeriod)
+		os.Exit(0)
+	}
 	return
 }
 
@@ -124,6 +138,11 @@ func (reg *ServiceRegistry) shutdownHandler() {
 		<-sigchan
 		reg.Shutdown()
 	}()
+}
+
+func (reg *ServiceRegistry) HandleGracefulShutdown(d time.Duration) {
+	reg.exitOnShutdown = true
+	reg.gracefulPeriod = d
 }
 
 // NewContainer creates a new empty ServiceRegistry
