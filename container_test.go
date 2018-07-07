@@ -2,7 +2,7 @@ package gocontainer
 
 import (
 	"fmt"
-	_ "testing"
+	"testing"
 )
 
 func Example() {
@@ -33,4 +33,17 @@ func Example() {
 	// base deps
 	// a cool struct
 	// base deps
+}
+
+func TestNewContainer(t *testing.T) {
+	container := NewContainer()
+	switch container.(type) {
+	case ServiceContainer:
+	default:
+		t.Error("Failed to initialize service container")
+	}
+}
+
+func TestUsage(t *testing.T) {
+	Example()
 }
